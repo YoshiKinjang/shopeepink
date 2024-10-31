@@ -48,13 +48,14 @@ public class Penjualan {
                 continue;
             }
             
-            System.out.print("Masukkan jumlah barang yang ingin dipesan: ");
+            System.out.print("Masukkan jumlah barang yang ingin dipesan : ");
             int jumlah = scanner.nextInt();
             scanner.nextLine(); 
             
             Barang barang = katalog.get(kode);
             if (jumlah > barang.stok) {
                 System.out.println("Jumlah melebihi stok. Silakan coba lagi.");
+                System.out.println("Tolol");
                 continue;
             }
             
