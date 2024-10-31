@@ -25,8 +25,10 @@ class Barang {
 public class Penjualan {
     private static Map<String, Barang> katalog = new HashMap<>();
     private static Map<String, Integer> keranjang = new HashMap<>();
+
     
     public static void main(String[] args) {
+        System.out.println("dewa");
         // Inisialisasi data barang
         initBarang();
 
