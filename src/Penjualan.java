@@ -29,6 +29,7 @@ public class Penjualan {
     
     public static void main(String[] args) {
         System.out.println("dewa");
+        System.out.println("kevinasu");
         // Inisialisasi data barang
         initBarang();
 
