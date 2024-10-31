@@ -5,6 +5,8 @@ public class Penjualan2 {
 
     
     public static void main(String[] args) {
+
+        System.out.println("kevkev");
         ///main data
         DataPlaceholder.initializeData();
 
