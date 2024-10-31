@@ -1,0 +1,84 @@
+# Ignore all class files
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# NetBeans
+nbproject/
+build/
+nbbuild/
+dist/
+nbdist/
+*.nb-gradle/
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+tmp/
+target/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# VS Code
+.vscode/
+
+# Gradle
+.gradle/
+build/
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+
+# Distribution directories
+dist/
+generated-sources/
+generated-test-sources/
+
+# Java-specific cache directories
+.cache/
+.mvn/
+.m2/
+
+# Temporary files
+*.swp
+*~
+
+# MacOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
+ehthumbs.db
+
+# Other unnecessary files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Sensitive files (e.g., IDE or OS-specific settings)
+*.env
+*.jks
