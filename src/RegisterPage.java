@@ -179,47 +179,52 @@ public class RegisterPage extends JPanel {
     private void registerAction() {
         daftarBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String username = usernameTf.getText();
-                String user_email = emailTf.getText();
-                String user_pasword = new String(passTf.getPassword());
+                String username = usernameTf.getText().trim();;
+                String user_email = emailTf.getText().trim();;
+                String user_pasword = new String(passTf.getPassword()).trim();
 
-                if(registerSystem(username, user_email, user_pasword)) {
-
-                    JDialog successDialog = new JDialog(new MainPage(), "Daftar akun", true);
-                    successDialog.setSize(700, 300);
-                    successDialog.setLayout(new CardLayout(50,50));
-                    successDialog.setLocationRelativeTo(new MainPage());
-
-                    JPanel pp = new JPanel();
-                    pp.setLayout(new BorderLayout());
-                    successDialog.add(pp);
-
-                    JLabel label = new JLabel("Akun berhasil didaftarkan");
-                    label.setFont(new Font("Arial", Font.BOLD, 24));
-                    pp.add(label, BorderLayout.CENTER);
-
-                    JButton closeButton = new JButton("Lanjut login");
-                    pp.add(closeButton, BorderLayout.SOUTH);
-                    
-                    closeButton.addActionListener(ev -> {
-                        successDialog.dispose();
-                        mainPage.switchToLoginPage();
-                    });
-
-                    successDialog.setVisible(true);
-
+                if (username.isEmpty() || user_email.isEmpty() || user_pasword.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Semua informasi dibutuhkan", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    ///remove error message
-                    System.out.println("nooo");
-                    Timer timer = new Timer();
-                    TimerTask task = new TimerTask() {
-                        @Override
-                        public void run() {
-                            errorHandler.setText("");
-                        }
-                    };
-                    timer.schedule(task, 3000);
+                    if(registerSystem(username, user_email, user_pasword)) {
+    
+                        JDialog successDialog = new JDialog(new MainPage(), "Daftar akun", true);
+                        successDialog.setSize(700, 300);
+                        successDialog.setLayout(new CardLayout(50,50));
+                        successDialog.setLocationRelativeTo(new MainPage());
+    
+                        JPanel pp = new JPanel();
+                        pp.setLayout(new BorderLayout());
+                        successDialog.add(pp);
+    
+                        JLabel label = new JLabel("Akun berhasil didaftarkan");
+                        label.setFont(new Font("Arial", Font.BOLD, 24));
+                        pp.add(label, BorderLayout.CENTER);
+    
+                        JButton closeButton = new JButton("Lanjut login");
+                        pp.add(closeButton, BorderLayout.SOUTH);
+                        
+                        closeButton.addActionListener(ev -> {
+                            successDialog.dispose();
+                            mainPage.switchToLoginPage();
+                        });
+    
+                        successDialog.setVisible(true);
+    
+                    } else {
+                        ///remove error message
+                        System.out.println("nooo");
+                        Timer timer = new Timer();
+                        TimerTask task = new TimerTask() {
+                            @Override
+                            public void run() {
+                                errorHandler.setText("");
+                            }
+                        };
+                        timer.schedule(task, 3000);
+                    }
                 }
+
             }
         });
         

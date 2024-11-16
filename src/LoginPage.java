@@ -125,25 +125,14 @@ public class LoginPage extends JPanel {
         add(pH);
 
         switchRegister();
-        authAction();
-    }
-
-    private void switchRegister() {
-        buatLbl.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                mainPage.switchToRegisterPage();
-            }
-        });
-    }
-
-    private void authAction() {
+        
         loginBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String user_email = emailTf.getText();
                 String user_pasword = new String(passTf.getPassword());
                 if(authSystem(user_email, user_pasword)) {
                     mainPage.switchToHomePage();
-                    session.dislayData();
+                    // System.out.println("dewa");
                 } else {
                     errorHandler.setText("Akun tidak ditemukan, periksa kembali email dan password anda");
 
@@ -159,7 +148,14 @@ public class LoginPage extends JPanel {
                 }
             }
         });
-        
+    }
+
+    private void switchRegister() {
+        buatLbl.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                mainPage.switchToRegisterPage();
+            }
+        });
     }
 
     private static boolean authSystem(String email, String password) {
@@ -173,6 +169,8 @@ public class LoginPage extends JPanel {
 
             pstmt.setString(1, email);
             pstmt.setString(2, password);
+
+            System.out.println(pstmt);
 
             ResultSet resultSet = pstmt.executeQuery();
             boolean isUserExist = resultSet.next();

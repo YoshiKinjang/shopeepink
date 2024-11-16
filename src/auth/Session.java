@@ -47,7 +47,7 @@ public class Session {
         return alamat;
     }
 
-    public void dislayData() {
+    public void displayData() {
         System.out.println("id\t" + id);
         System.out.println("username\t" + username);
         System.out.println("email\t" + email);

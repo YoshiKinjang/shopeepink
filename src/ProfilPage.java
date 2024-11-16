@@ -1,79 +1,25 @@
 import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-public class ProfilPage extends JFrame {
-    public ProfilPage() {
-        setTitle("Profil Saya");
+import javax.swing.*;
+
+import auth.Session;
+import database.DatabaseConnection;
+
+public class ProfilPage extends JDialog {
+    private static Session session = Session.getInstance();
+    MainPage mainPage = new MainPage();
+    static JTextField passwordField = new JTextField(20);
+    public ProfilPage(MainPage owner) {
+        super(owner, "Profil Saya", true);
+        this.mainPage = owner;
         setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(new MainPage());
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Panel Atas yang memanjang dari kiri ke kanan
-        /// Panel atas (Top Bar) pada HomePage
-JPanel topBarParent = new JPanel();
-GridBagConstraints tbp_gbc = new GridBagConstraints();
-
-// Set layout dan border untuk topBarParent
-topBarParent.setLayout(new GridBagLayout());
-topBarParent.setBorder(new EmptyBorder(8, 8, 50, 8));
-topBarParent.setBackground(Color.white);
-
-// Logo
-ImageIcon logoIcon = new ImageIcon("img/logo.png");
-Image resizedImage = logoIcon.getImage().getScaledInstance(55, 55, Image.SCALE_SMOOTH);
-ImageIcon resizedIcon = new ImageIcon(resizedImage);
-JLabel logoLabel = new JLabel(resizedIcon);
-
-// Ikon user
-ImageIcon userIcon = new ImageIcon("img/user.png");
-Image resizedUser = userIcon.getImage().getScaledInstance(55, 55, Image.SCALE_SMOOTH);
-ImageIcon resizedUIcon = new ImageIcon(resizedUser);
-JLabel userLbl = new JLabel(resizedUIcon);
-
-// Text field untuk pencarian
-
-JTextField searchTf = new JTextField();
-
-tbp_gbc.fill = GridBagConstraints.BOTH;  
-        tbp_gbc.weightx = 0.5;  
-        tbp_gbc.gridx = 0;  
-        tbp_gbc.gridy = 0; 
-        tbp_gbc.anchor = GridBagConstraints.LINE_START;
-        topBarParent.add(logoLabel, tbp_gbc);
-
-        ///search field
-        tbp_gbc.fill = GridBagConstraints.BOTH;  
-        tbp_gbc.weightx = 1; 
-        tbp_gbc.gridx = 1;  
-        tbp_gbc.gridy = 0; 
-        topBarParent.add(searchTf, tbp_gbc);
-
-        ///user icon
-        tbp_gbc.fill = GridBagConstraints.BOTH;  
-        tbp_gbc.weightx = 0.5; 
-        tbp_gbc.gridx = 2;  
-        tbp_gbc.gridy = 0; 
-        topBarParent.add(userLbl, tbp_gbc);
-
-
-// Menambah komponen logo ke topBarParent
-tbp_gbc.fill = GridBagConstraints.BOTH;  
-tbp_gbc.weightx = 0.5;  
-tbp_gbc.gridx = 0;  
-tbp_gbc.gridy = 0; 
-tbp_gbc.anchor = GridBagConstraints.LINE_START;
-topBarParent.add(logoLabel, tbp_gbc);
-
-// Menambah komponen pencarian ke topBarParent
-tbp_gbc.weightx = 1; 
-tbp_gbc.gridx = 1;
-topBarParent.add(searchTf, tbp_gbc);
-
-// Menambah komponen user icon ke topBarParent
-tbp_gbc.weightx = 0.5; 
-tbp_gbc.gridx = 2;
-topBarParent.add(userLbl, tbp_gbc);
 
         // Panel kiri dengan tombol Kembali
         JPanel panelKiri = new JPanel();
@@ -115,7 +61,8 @@ topBarParent.add(userLbl, tbp_gbc);
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 2;
-        JTextField usernameField = new JTextField("", 20);
+        JTextField usernameField = new JTextField(session.getUsername(), 20);
+        usernameField.setEditable(false);
         formBackgroundPanel.add(usernameField, gbc);
 
         // Panel Email
@@ -128,7 +75,8 @@ topBarParent.add(userLbl, tbp_gbc);
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
-        JTextField emailField = new JTextField("", 20);
+        JTextField emailField = new JTextField(session.getEmail(), 20);
+        emailField.setEditable(false);
         formBackgroundPanel.add(emailField, gbc);
 
         // Panel Ganti Password
@@ -140,7 +88,6 @@ topBarParent.add(userLbl, tbp_gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 3;
-        JTextField passwordField = new JTextField(20);
         formBackgroundPanel.add(passwordField, gbc);
 
         gbc.gridx = 2;
@@ -165,9 +112,9 @@ topBarParent.add(userLbl, tbp_gbc);
         panelAlamat.setLayout(new BoxLayout(panelAlamat, BoxLayout.Y_AXIS));
         panelAlamat.setBackground(Color.WHITE);
 
-        JTextField alamatField1 = new JTextField("", 20);
-        JTextField alamatField2 = new JTextField(20);
-        JTextField alamatField3 = new JTextField(20);
+        JTextField alamatField1 = new JTextField(session.getAlamat()[0], 20);
+        JTextField alamatField2 = new JTextField(session.getAlamat()[1], 20);
+        JTextField alamatField3 = new JTextField(session.getAlamat()[2], 20);
 
         panelAlamat.add(alamatField1);
         panelAlamat.add(Box.createVerticalStrut(5)); // Spasi antar field
@@ -197,17 +144,25 @@ topBarParent.add(userLbl, tbp_gbc);
         gbcLogo.anchor = GridBagConstraints.SOUTH;
         gbcLogo.insets = new Insets(10, 10, 10, 10);
 
-       
-
         // Tambahkan panelAtas, panelKiri, dan wrapperPanel ke frame
-        add(topBarParent, BorderLayout.NORTH); // Menambahkan panel di atas
         add(wrapperPanel, BorderLayout.CENTER);
+
+        //listener
+        alamatField1.addActionListener(e -> {updateAlamat(1, alamatField1.getText());});
+        alamatField2.addActionListener(e -> {updateAlamat(2, alamatField2.getText());});
+        alamatField3.addActionListener(e -> {updateAlamat(3, alamatField3.getText());});
+        kembalibutton.addActionListener(e-> { 
+            MainPage mainPage = (MainPage) SwingUtilities.getWindowAncestor(this);
+            this.dispose();
+            mainPage.logout();
+        });
+        konfirmasiButton.addActionListener(e -> {updatePassword(passwordField.getText());});
+
 
         // Tampilkan frame
         setVisible(true);
     }
 
-    // Kelas custom JPanel dengan sudut melengkung
     private static class RoundedPanel extends JPanel {
         private final int cornerRadius;
         private final Color backgroundColor;
@@ -228,7 +183,78 @@ topBarParent.add(userLbl, tbp_gbc);
         }
     }
 
-    public static void main(String[] args) {
-        new ProfilPage();
+    private static void updateAlamat(int urutan, String alamat) {
+        DatabaseConnection dtbs = new DatabaseConnection();
+        String query = "";
+
+        switch (urutan) {
+            case 1:
+                query = """
+                    update customer \r
+                    set alamat_1 = ?\r
+                    where id = ?;""";
+                break;
+            case 2:
+                query = """
+                        update customer \r
+                        set alamat_2 = ?\r
+                        where id = ?;""";
+                break;
+            case 3:
+                query = """
+                    update customer \r
+                    set alamat_3 = "?"\r
+                    where id = ?;""";
+                break;
+            default:
+                throw new AssertionError();
+        }
+    
+        try {
+            Connection conn  = dtbs.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+
+            pstmt.setString(1, alamat);
+            pstmt.setInt(2, session.getId());
+
+            int rowsAffected = pstmt.executeUpdate();
+    
+            System.out.println("" + rowsAffected + "");
+
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void updatePassword(String password) {
+        DatabaseConnection dtbs = new DatabaseConnection();
+        String query = """
+                        update customer \r
+                        set password = ?\r
+                        where id = ?;""";
+        if(!password.equals("")) {
+            try {
+                Connection conn  = dtbs.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(query);
+    
+                pstmt.setString(1, password);
+                pstmt.setInt(2, session.getId());
+    
+                int rowsAffected = pstmt.executeUpdate();
+
+                if(rowsAffected > 0) {
+                    passwordField.setText("");
+                }
+        
+                System.out.println("" + rowsAffected + "");
+    
+                conn.close();
+    
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

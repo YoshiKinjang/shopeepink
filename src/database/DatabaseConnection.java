@@ -21,7 +21,7 @@ public class DatabaseConnection {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("Terkoneksi");
+            // System.out.println("Terkoneksi");
         } catch (SQLException e) {
             e.printStackTrace();
         }
