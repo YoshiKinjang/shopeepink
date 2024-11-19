@@ -25,7 +25,17 @@ public class Session {
         this.email = email;
         this.password = password;
         this.alamat = alamat;
-    }
+    } 
+
+    public void setAlamat1(String alamat ){ 
+        this.alamat[0] = alamat;
+    }  
+    public void setAlamat2(String alamat ){ 
+        this.alamat[1] = alamat;
+    }  
+    public void setAlamat3(String alamat ){ 
+        this.alamat[2] = alamat;
+    }  
 
     public int getId() {
         return id;

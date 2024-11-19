@@ -6,11 +6,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.sql.Statement;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -1010,7 +1010,7 @@ public class HomePage extends JPanel {
                 int produk_id = Integer.parseInt(productIdStore.getText());
 
                 if(!isBarangAda) {
-                    insertProdukKeranjang(produk_id, 1);
+                    insertProdukKeranjang(produk_id, session.getId());
                 } else {
                     updateKeranjangQuantityFromItem(produk_id, session.getId(), 1);
                 }
@@ -1068,7 +1068,11 @@ public class HomePage extends JPanel {
     private void checkoutNow() {
         checkOutBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mainPage.switchToCheckoutPage(checkoutItem);
+                if( session.getAlamat()[0] == null) {
+                    JOptionPane.showMessageDialog(mainPage, "Alamat anda kosong : Tolong Isi alamat anda di bagian Profil terlebih dahulu!","Checkout Invalid",JOptionPane.WARNING_MESSAGE);
+                } else {
+                    mainPage.switchToCheckoutPage(checkoutItem);
+                }
             }
         });
     }

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     static final String DB_URL = "jdbc:mysql://localhost:3306/shopee_pink";
     static final String USER = "root";
-    static final String PASS = "12345";
+    static final String PASS = "140705";
 
     static {
         try {

@@ -1,12 +1,10 @@
+import auth.Session;
+import database.DatabaseConnection;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
 import javax.swing.*;
-
-import auth.Session;
-import database.DatabaseConnection;
 
 public class ProfilPage extends JDialog {
     private static Session session = Session.getInstance();
@@ -218,6 +216,21 @@ public class ProfilPage extends JDialog {
             pstmt.setInt(2, session.getId());
 
             int rowsAffected = pstmt.executeUpdate();
+            if ( rowsAffected > 0 ) { 
+                switch (urutan) {
+                    case 1:
+                        session.setAlamat1(alamat);
+                        break;
+                    case 2:
+                        session.setAlamat2(alamat);
+                        break;
+                    case 3:
+                        session.setAlamat3(alamat);   
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+            }
     
             System.out.println("" + rowsAffected + "");
 

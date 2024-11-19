@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.TimerTask;
 import java.awt.*;
 import java.util.Timer;
@@ -237,14 +238,24 @@ public class RegisterPage extends JPanel {
 
         try {
             Connection conn  = dtbs.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query);
+            PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             pstmt.setString(1, username);
             pstmt.setString(2, email);
-            pstmt.setString(3, password);
+            pstmt.setString(3, password); 
 
             int rowsAffrected = pstmt.executeUpdate();
-
+            if (rowsAffrected > 0) {
+                System.out.println("tes2");
+                try {
+                    ResultSet keys = pstmt.getGeneratedKeys();
+                    while (keys.next()) {
+                        inCupon(keys.getInt(1), 5);
+                    }
+                } catch (SQLException e) {
+                    System.out.println(e.getLocalizedMessage());
+                } 
+            }
             return rowsAffrected > 0;
 
         } catch (SQLException e) {
@@ -252,6 +263,25 @@ public class RegisterPage extends JPanel {
         }
 
         return false;
+    }
+
+    public static void inCupon(int costumerid, int potongan) { 
+        DatabaseConnection inkupon = new DatabaseConnection();
+        String query = """
+                       INSERT INTO shopee_pink.kupon_belanja (customer_id,potongan_persen)\r
+                       \tVALUES (?,?);\r
+                       """ 
+        ; 
+        try {
+            Connection konek =  inkupon.getConnection();
+            PreparedStatement ss = konek.prepareStatement(query);
+            
+            ss.setInt(1, costumerid);
+            ss.setInt(2, potongan);
+            int rowsAffrected = ss.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getLocalizedMessage());
+        }
     }
 
 
