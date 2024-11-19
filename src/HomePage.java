@@ -68,7 +68,7 @@ public class HomePage extends JPanel {
         GridBagConstraints tbp_gbc = new GridBagConstraints();
 
         ///populate top bar component
-        ImageIcon logoIcon = new ImageIcon("img/logo.png");
+        ImageIcon logoIcon = new ImageIcon("img/logoSBaru.png");
         Image resizedImage = logoIcon.getImage().getScaledInstance(55, 55, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(resizedImage);
         JLabel logoLabel = new JLabel(resizedIcon);

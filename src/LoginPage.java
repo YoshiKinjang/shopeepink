@@ -18,7 +18,7 @@ public class LoginPage extends JPanel {
     JPanel pH = new JPanel();
     JPanel fH = new JPanel();
     JPanel buatPanel = new JPanel();
-    ImageIcon imageIcon = new ImageIcon("img/logo.png");
+    ImageIcon imageIcon = new ImageIcon("img/logoSBaru.png");
     JLabel imageLabel = new JLabel(imageIcon);
     JLabel buatLbl = new JLabel("Buat");
     JLabel buatPert = new JLabel("Belum punya akun? ");
